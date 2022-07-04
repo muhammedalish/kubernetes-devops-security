@@ -35,7 +35,14 @@ pipeline {
 
     stage('SonarQ Testing') {
       steps {
-        sh "mvn sonar:sonar -Dsonar.projectKey=devsecops-demo -Dsonar.host.url=http://devsecops-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=a93f5cc494c0ccc05774ad5d07ca6d34bbb9a7b1"
+        withSonarQubeEnv('SonarQube') {
+          sh "mvn sonar:sonar -Dsonar.projectKey=devsecops-demo -Dsonar.host.url=http://devsecops-test.eastus.cloudapp.azure.com:9000 -Dsonar.login=a93f5cc494c0ccc05774ad5d07ca6d34bbb9a7b1"
+      }
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }
       }
     }
 

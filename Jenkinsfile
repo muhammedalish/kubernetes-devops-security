@@ -52,7 +52,7 @@ pipeline {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
           sh 'printenv'
-          sh 'docker build -t muhammedalisharaby/numeric-app:""$GIT_COMMIT"" .'
+          sh 'sudo docker build -t muhammedalisharaby/numeric-app:""$GIT_COMMIT"" .'
           sh 'docker push muhammedalisharaby/numeric-app:""$GIT_COMMIT""'
         }
       }
@@ -66,7 +66,7 @@ pipeline {
       }
     }
   }
-    post {
+  post {
     always {
       junit 'target/surefire-reports/*.xml'
       jacoco execPattern: 'target/jacoco.exec'
@@ -80,4 +80,5 @@ pipeline {
     // failure {
 
     // }
-}}
+  }
+}
